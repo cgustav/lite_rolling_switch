@@ -4,7 +4,7 @@ Full customizable rolling switch widget for flutter apps based on Pedro Massango
 
 ## Preview
 
-![Image preview](https://gph.is/g/E0l6Oqy)
+![Image preview](https://media.giphy.com/media/hTx1jlMxasyVejHa6U/giphy.gif)
 
 ## Example
 
