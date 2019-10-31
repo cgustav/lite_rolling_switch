@@ -1,3 +1,3 @@
-## [0.0.1] - TODO: Add release date.
+## [0.0.1] - Initial Release: October 31th, 2019.
 
-* TODO: Describe initial release.
+* Widget initial release with basic color and other cosmetic customation.

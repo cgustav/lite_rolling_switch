@@ -1,8 +1,8 @@
 name: lite_rolling_switch
 description: A new Flutter package project.
 version: 0.0.1
-author:
-homepage:
+author: Eduardo Munoz <edomun@protonmail.com>
+homepage: https://github.com/cgustav/lite_rolling_switch
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
