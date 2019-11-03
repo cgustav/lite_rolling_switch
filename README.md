@@ -2,9 +2,18 @@
 
 Full customizable rolling switch widget for flutter apps based on Pedro Massango's 'crazy-switch' widget https://github.com/pedromassango/crazy-switch
 
-## Preview
+## About 
+
+Customable and attractive Switch button. Manage widget states in the same way you do with the classical material's switch widget.
+
+> **NOTE**: Currently, you cannot directly change the widget width and height properties. This feature will be available soon.
+
+
+## Previews
 
 ![Image preview](https://media.giphy.com/media/hTx1jlMxasyVejHa6U/giphy.gif)
+
+![Image preview 2](https://media.giphy.com/media/ZElJc2bCOVhTizIfFS/giphy.gif)
 
 ## Example
 
@@ -20,11 +29,6 @@ LiteRollingSwitch(
     iconOn: Icons.done,
     iconOff: Icons.remove_circle_outline,
     textSize: 16.0,
-    mainAction: () {
-      //it will work on onTap, onDoubleTap
-      //& onDrag events.
-      print('Something here!');
-    },
     onChanged: (bool state) {
       //Use it to manage the different states
       print('Current State of SWITCH IS: $state');
