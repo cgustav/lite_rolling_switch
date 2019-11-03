@@ -1,6 +1,6 @@
 name: lite_rolling_switch
-description: A new Flutter package project.
-version: 0.0.1
+description: Customable and attractive Switch button for flutter apps based on Pedro Massango's crazy-switch widget. Manage widget states in the same way you do with the classical material's switch widget.
+version: 0.1.1
 author: Eduardo Munoz <edomun@protonmail.com>
 homepage: https://github.com/cgustav/lite_rolling_switch
 
