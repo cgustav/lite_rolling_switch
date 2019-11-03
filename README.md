@@ -13,11 +13,12 @@ Customable and attractive Switch button. Manage widget states in the same way yo
 
 ![Image preview](https://media.giphy.com/media/hTx1jlMxasyVejHa6U/giphy.gif)
 
-![Image preview 2](https://media.giphy.com/media/ZElJc2bCOVhTizIfFS/giphy.gif)
+![Image preview 2](https://media.giphy.com/media/TKSIVzM5RUDxnjucTf/giphy.gif)
 
-## Example
+## Basic Implementation
 
 ``` dart
+import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 
 LiteRollingSwitch(
     //initial value
