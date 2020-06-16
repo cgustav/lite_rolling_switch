@@ -34,7 +34,7 @@ class LiteRollingSwitch extends StatefulWidget {
     this.colorOff = Colors.red,
     this.iconOff = Icons.flag,
     this.iconOn = Icons.check,
-    this.animationDuration = const Duration(milliseconds: 2600),
+    this.animationDuration = const Duration(milliseconds: 600),
     this.onTap,
     this.onDoubleTap,
     this.onSwipe,
@@ -47,8 +47,8 @@ class LiteRollingSwitch extends StatefulWidget {
 }
 
 class _RollingSwitchState extends State<LiteRollingSwitch> with SingleTickerProviderStateMixin {
-  double maxWidthRotation = 0.0;
   final double _margin = 10.0;
+  double maxWidthRotation = 0.0;
 
   AnimationController animationController;
   Animation<double> animation;
@@ -56,7 +56,7 @@ class _RollingSwitchState extends State<LiteRollingSwitch> with SingleTickerProv
   Animation<double> animationOpacityIn;
   double value = 0.0;
 
-  bool turnState;
+  bool turnState = true;
 
   @override
   void initState() {
@@ -72,12 +72,17 @@ class _RollingSwitchState extends State<LiteRollingSwitch> with SingleTickerProv
     initAllAnimation();
 
     turnState = widget.initialState;
+    if (turnState) {
+      animationController.value = 1;
+    }
+
     //_determine();
   }
 
   @override
   Widget build(BuildContext context) {
     Color transitionColor = Color.lerp(widget.colorOff, widget.colorOn, value);
+
     return GestureDetector(
       onDoubleTap: () {
         _action();

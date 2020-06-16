@@ -44,8 +44,8 @@ class _MyHomePageState extends State<MyHomePage> {
               padding: EdgeInsets.only(top: 20),
               child: LiteRollingSwitch(
                 initialState: true,
-                textOn: 'active',
-                textOff: 'inactive',
+                textOn: Text('active'),
+                textOff: Text('inactive'),
                 colorOn: Colors.deepOrange,
                 colorOff: Colors.blueGrey,
                 iconOn: Icons.lightbulb_outline,
