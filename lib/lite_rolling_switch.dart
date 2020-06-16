@@ -111,21 +111,19 @@ class _RollingSwitchState extends State<LiteRollingSwitch> with SingleTickerProv
                   offset: Offset(_margin.toInt() * animation.value, 0), //original
                   child: FadeTransition(
                     opacity: animationOpacityOut,
-                    child: Container(
-                      padding: EdgeInsets.only(right: _margin),
-                      alignment: Alignment.centerRight,
-                      height: widget.innerSize,
-                      child: widget.textOff,
+                    child: _TextRight(
+                      margin: _margin,
+                      size: widget.innerSize,
+                      text: widget.textOff,
                     ),
                   ),
                 ),
                 AnimatedBuilder(
                   animation: animationController,
-                  child: Container(
-                    padding: EdgeInsets.only(left: _margin),
-                    alignment: Alignment.centerLeft,
-                    height: widget.innerSize,
-                    child: widget.textOn,
+                  child: _TextLeft(
+                    size: widget.innerSize,
+                    margin: _margin,
+                    text: widget.textOn,
                   ),
                   builder: (_, child) => Transform.translate(
                     offset: Offset(_margin.toInt() * (1 - animation.value), 0), //original
@@ -138,15 +136,9 @@ class _RollingSwitchState extends State<LiteRollingSwitch> with SingleTickerProv
                 AnimatedBuilder(
                   animation: animationController,
                   child: Transform.rotate(
-                    angle: lerpDouble(0, 2 * pi, animation.value),
-                    child: Container(
-                      height: widget.innerSize,
-                      width: widget.innerSize,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white,
-                      ),
+                    angle: lerpDouble(0, 2 * pi, animationController.value),
+                    child: _CircularContainer(
+                      size: widget.innerSize,
                       child: Stack(
                         children: <Widget>[
                           _IconWidget(
@@ -210,16 +202,74 @@ class _RollingSwitchState extends State<LiteRollingSwitch> with SingleTickerProv
   }
 
   _action() {
-    _determine(changeState: true);
+    turnState = !turnState;
+    (turnState) ? animationController.forward() : animationController.reverse();
+
+    widget.onChanged(turnState);
+    /*setState(() {
+    
+    });*/
   }
+}
 
-  _determine({bool changeState = false}) {
-    setState(() {
-      if (changeState) turnState = !turnState;
-      (turnState) ? animationController.forward() : animationController.reverse();
+class _TextRight extends StatelessWidget {
+  final double margin;
+  final double size;
+  final Text text;
 
-      widget.onChanged(turnState);
-    });
+  const _TextRight({Key key, this.margin, this.size, this.text}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(right: margin),
+      alignment: Alignment.centerRight,
+      height: size,
+      child: text,
+    );
+  }
+}
+
+class _TextLeft extends StatelessWidget {
+  final double margin;
+  final double size;
+  final Text text;
+
+  const _TextLeft({Key key, this.margin, this.size, this.text}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(left: margin),
+      alignment: Alignment.centerLeft,
+      height: size,
+      child: text,
+    );
+  }
+}
+
+class _CircularContainer extends StatelessWidget {
+  final double size;
+  final Widget child;
+
+  const _CircularContainer({
+    Key key,
+    this.size,
+    this.child,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: size,
+      width: size,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.white,
+      ),
+      child: child,
+    );
   }
 }
 
