@@ -1,7 +1,5 @@
 library lite_rolling_switch;
 
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'dart:math';
@@ -52,8 +50,6 @@ class _RollingSwitchState extends State<LiteRollingSwitch> with SingleTickerProv
   final double _margin = 10.0;
   double maxWidthRotation = 0.0;
   double value = 0.0;
-
-  final _colorNotifier = ValueNotifier<double>(0.0);
 
   AnimationController animationController;
   Animation<double> animation;
@@ -153,25 +149,17 @@ class _RollingSwitchState extends State<LiteRollingSwitch> with SingleTickerProv
                       ),
                       child: Stack(
                         children: <Widget>[
-                          Center(
-                            child: FadeTransition(
-                              opacity: animationOpacityOut,
-                              child: Icon(
-                                widget.iconOff,
-                                size: widget.innerSize / 2,
-                                color: animationColor.value,
-                              ),
-                            ),
+                          _IconWidget(
+                            animationOpacity: animationOpacityOut,
+                            iconData: widget.iconOff,
+                            size: widget.innerSize / 2,
+                            colorValue: animationColor.value,
                           ),
-                          Center(
-                            child: FadeTransition(
-                              opacity: animationOpacityIn,
-                              child: Icon(
-                                widget.iconOn,
-                                size: widget.innerSize / 2,
-                                color: animationColor.value,
-                              ),
-                            ),
+                          _IconWidget(
+                            animationOpacity: animationOpacityIn,
+                            iconData: widget.iconOn,
+                            size: widget.innerSize / 2,
+                            colorValue: animationColor.value,
                           ),
                         ],
                       ),
@@ -188,6 +176,12 @@ class _RollingSwitchState extends State<LiteRollingSwitch> with SingleTickerProv
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
   }
 
   void initAllAnimation() {
@@ -207,35 +201,12 @@ class _RollingSwitchState extends State<LiteRollingSwitch> with SingleTickerProv
       ),
     );
 
-    animationColor = ColorTween(begin: widget.colorOn, end: widget.colorOff).animate(
+    animationColor = ColorTween(begin: widget.colorOff, end: widget.colorOn).animate(
       CurvedAnimation(
         parent: animationController,
         curve: Interval(0.0, 1.0, curve: Curves.easeInOut),
       ),
     );
-
-    /*animationColor = TweenSequence<Color>(
-      [
-        TweenSequenceItem(
-          weight: 1.0,
-          tween: ColorTween(
-            begin: widget.colorOff,
-            end: widget.colorOn,
-          ),
-        ),
-      ],
-    );*/
-
-    animationController.addListener(() {
-      _colorNotifier.value = animationController.value;
-    });
-  }
-
-  @override
-  void dispose() {
-    animationController.dispose();
-    _colorNotifier.dispose();
-    super.dispose();
   }
 
   _action() {
@@ -249,5 +220,34 @@ class _RollingSwitchState extends State<LiteRollingSwitch> with SingleTickerProv
 
       widget.onChanged(turnState);
     });
+  }
+}
+
+class _IconWidget extends StatelessWidget {
+  final IconData iconData;
+  final double size;
+  final Animation<double> animationOpacity;
+  final Color colorValue;
+
+  const _IconWidget({
+    Key key,
+    @required this.animationOpacity,
+    @required this.iconData,
+    @required this.size,
+    @required this.colorValue,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: FadeTransition(
+        opacity: animationOpacity,
+        child: Icon(
+          iconData,
+          size: size,
+          color: colorValue,
+        ),
+      ),
+    );
   }
 }
