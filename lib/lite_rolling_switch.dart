@@ -4,18 +4,31 @@ import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'dart:math';
 
+/// Customable and attractive Switch button.
+///
+/// As well as the classical Switch Widget
+/// from flutter material, the following
+/// arguments are required:
+///
+/// * [value] determines whether this switch is on or off.
+/// * [onChanged] is called when the user toggles the switch on or off.
+///
+/// If you don't set these arguments you would
+/// experiment errors related to animationController
+/// states or any other undesirable behavior, please
+/// don't forget to set them.
 class LiteRollingSwitch extends StatefulWidget {
   @required
-  final bool initialState;
+  final bool initialStateRight;
   @required
   final Function(bool) onChanged;
   final double width;
   final double height;
   final double innerSize;
-  final Text textOff;
-  final Text textOn;
-  final Color colorOn;
-  final Color colorOff;
+  final Text textRight;
+  final Text textLeft;
+  final Color colorLeft;
+  final Color colorRight;
   final Duration animationDuration;
   final IconData iconOn;
   final IconData iconOff;
@@ -24,14 +37,14 @@ class LiteRollingSwitch extends StatefulWidget {
   final Function onSwipe;
 
   LiteRollingSwitch({
-    this.initialState = false,
+    this.initialStateRight = false,
     this.width = 130.0,
     this.height = 50.0,
     this.innerSize = 40.0,
-    this.textOff,
-    this.textOn,
-    this.colorOn = Colors.green,
-    this.colorOff = Colors.red,
+    this.textRight,
+    this.textLeft,
+    this.colorLeft = Colors.green,
+    this.colorRight = Colors.red,
     this.iconOff = Icons.flag,
     this.iconOn = Icons.check,
     this.animationDuration = const Duration(milliseconds: 600),
@@ -39,7 +52,7 @@ class LiteRollingSwitch extends StatefulWidget {
     this.onDoubleTap,
     this.onSwipe,
     this.onChanged,
-  })  : assert(initialState != null && onChanged != null),
+  })  : assert(initialStateRight != null && onChanged != null),
         assert(height >= 50.0 && innerSize >= 40.0);
 
   @override
@@ -72,7 +85,7 @@ class _RollingSwitchState extends State<LiteRollingSwitch> with SingleTickerProv
     );
     initAllAnimation();
 
-    turnState = widget.initialState;
+    turnState = widget.initialStateRight;
     if (turnState) {
       animationController.value = 1;
     }
@@ -114,7 +127,7 @@ class _RollingSwitchState extends State<LiteRollingSwitch> with SingleTickerProv
                     child: _TextRight(
                       margin: _margin,
                       size: widget.innerSize,
-                      text: widget.textOff,
+                      text: widget.textRight,
                     ),
                   ),
                 ),
@@ -123,7 +136,7 @@ class _RollingSwitchState extends State<LiteRollingSwitch> with SingleTickerProv
                   child: _TextLeft(
                     size: widget.innerSize,
                     margin: _margin,
-                    text: widget.textOn,
+                    text: widget.textLeft,
                   ),
                   builder: (_, child) => Transform.translate(
                     offset: Offset(_margin.toInt() * (1 - animation.value), 0), //original
@@ -193,7 +206,7 @@ class _RollingSwitchState extends State<LiteRollingSwitch> with SingleTickerProv
       ),
     );
 
-    animationColor = ColorTween(begin: widget.colorOff, end: widget.colorOn).animate(
+    animationColor = ColorTween(begin: widget.colorRight, end: widget.colorLeft).animate(
       CurvedAnimation(
         parent: animationController,
         curve: Interval(0.0, 1.0, curve: Curves.easeInOut),
@@ -204,11 +217,7 @@ class _RollingSwitchState extends State<LiteRollingSwitch> with SingleTickerProv
   _action() {
     turnState = !turnState;
     (turnState) ? animationController.forward() : animationController.reverse();
-
     widget.onChanged(turnState);
-    /*setState(() {
-    
-    });*/
   }
 }
 
