@@ -1,5 +1,7 @@
 library lite_rolling_switch;
 
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'dart:math';
@@ -49,12 +51,14 @@ class LiteRollingSwitch extends StatefulWidget {
 class _RollingSwitchState extends State<LiteRollingSwitch> with SingleTickerProviderStateMixin {
   final double _margin = 10.0;
   double maxWidthRotation = 0.0;
+  double value = 0.0;
+
+  final _colorNotifier = ValueNotifier<double>(0.0);
 
   AnimationController animationController;
   Animation<double> animation;
   Animation<double> animationOpacityOut;
   Animation<double> animationOpacityIn;
-  double value = 0.0;
 
   bool turnState = true;
 
@@ -72,16 +76,14 @@ class _RollingSwitchState extends State<LiteRollingSwitch> with SingleTickerProv
     initAllAnimation();
 
     turnState = widget.initialState;
-    if (turnState) {
+    /*if (turnState) {
       animationController.value = 1;
-    }
-
-    //_determine();
+    }*/
   }
 
   @override
   Widget build(BuildContext context) {
-    Color transitionColor = Color.lerp(widget.colorOff, widget.colorOn, value);
+    Color transitionColor = Color.lerp(widget.colorOff, widget.colorOn, animation.value);
 
     return GestureDetector(
       onDoubleTap: () {
@@ -108,34 +110,42 @@ class _RollingSwitchState extends State<LiteRollingSwitch> with SingleTickerProv
         child: Center(
           child: Stack(
             children: <Widget>[
-              Transform.translate(
-                offset: Offset(_margin.toInt() * value, 0), //original
-                child: FadeTransition(
-                  opacity: animationOpacityOut,
-                  child: Container(
-                    padding: EdgeInsets.only(right: _margin),
-                    alignment: Alignment.centerRight,
-                    height: widget.innerSize,
-                    child: widget.textOff,
+              AnimatedBuilder(
+                animation: animationController,
+                child: Container(
+                  padding: EdgeInsets.only(right: _margin),
+                  alignment: Alignment.centerRight,
+                  height: widget.innerSize,
+                  child: widget.textOff,
+                ),
+                builder: (_, child) => Transform.translate(
+                  offset: Offset(_margin.toInt() * animation.value, 0), //original
+                  child: FadeTransition(
+                    opacity: animationOpacityOut,
+                    child: child,
                   ),
                 ),
               ),
-              Transform.translate(
-                offset: Offset(_margin.toInt() * (1 - value), 0), //original
-                child: FadeTransition(
-                  opacity: animationOpacityIn,
-                  child: Container(
-                    padding: EdgeInsets.only(left: _margin),
-                    alignment: Alignment.centerLeft,
-                    height: widget.innerSize,
-                    child: widget.textOn,
+              AnimatedBuilder(
+                animation: animationController,
+                child: Container(
+                  padding: EdgeInsets.only(left: _margin),
+                  alignment: Alignment.centerLeft,
+                  height: widget.innerSize,
+                  child: widget.textOn,
+                ),
+                builder: (_, child) => Transform.translate(
+                  offset: Offset(_margin.toInt() * (1 - animation.value), 0), //original
+                  child: FadeTransition(
+                    opacity: animationOpacityIn,
+                    child: child,
                   ),
                 ),
               ),
-              Transform.translate(
-                offset: Offset(maxWidthRotation * value, 0),
+              AnimatedBuilder(
+                animation: animationController,
                 child: Transform.rotate(
-                  angle: lerpDouble(0, 2 * pi, value),
+                  angle: lerpDouble(0, 2 * pi, animation.value),
                   child: Container(
                     height: widget.innerSize,
                     width: widget.innerSize,
@@ -170,6 +180,10 @@ class _RollingSwitchState extends State<LiteRollingSwitch> with SingleTickerProv
                     ),
                   ),
                 ),
+                builder: (_, child) => Transform.translate(
+                  offset: Offset(maxWidthRotation * animation.value, 0),
+                  child: child,
+                ),
               )
             ],
           ),
@@ -196,15 +210,14 @@ class _RollingSwitchState extends State<LiteRollingSwitch> with SingleTickerProv
     );
 
     animationController.addListener(() {
-      setState(() {
-        value = animation.value;
-      });
+      _colorNotifier.value = animationController.value;
     });
   }
 
   @override
   void dispose() {
     animationController.dispose();
+    _colorNotifier.dispose();
     super.dispose();
   }
 
