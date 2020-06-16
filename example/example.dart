@@ -33,7 +33,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             //By default
             LiteRollingSwitch(
-              value: false,
+              initialState: false,
               onChanged: (bool state) {
                 print('turned ${(state) ? 'on' : 'off'}');
               },
@@ -43,7 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Padding(
               padding: EdgeInsets.only(top: 20),
               child: LiteRollingSwitch(
-                value: true,
+                initialState: true,
                 textOn: 'active',
                 textOff: 'inactive',
                 colorOn: Colors.deepOrange,
