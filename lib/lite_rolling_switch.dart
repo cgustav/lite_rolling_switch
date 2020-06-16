@@ -84,8 +84,6 @@ class _RollingSwitchState extends State<LiteRollingSwitch> with SingleTickerProv
 
   @override
   Widget build(BuildContext context) {
-    //Color transitionColor = Color.lerp(widget.colorOff, widget.colorOn, animation.value);
-
     return GestureDetector(
       onDoubleTap: () {
         _action();
@@ -113,19 +111,15 @@ class _RollingSwitchState extends State<LiteRollingSwitch> with SingleTickerProv
           child: Center(
             child: Stack(
               children: <Widget>[
-                AnimatedBuilder(
-                  animation: animationController,
-                  child: Container(
-                    padding: EdgeInsets.only(right: _margin),
-                    alignment: Alignment.centerRight,
-                    height: widget.innerSize,
-                    child: widget.textOff,
-                  ),
-                  builder: (_, child) => Transform.translate(
-                    offset: Offset(_margin.toInt() * animation.value, 0), //original
-                    child: FadeTransition(
-                      opacity: animationOpacityOut,
-                      child: child,
+                Transform.translate(
+                  offset: Offset(_margin.toInt() * animation.value, 0), //original
+                  child: FadeTransition(
+                    opacity: animationOpacityOut,
+                    child: Container(
+                      padding: EdgeInsets.only(right: _margin),
+                      alignment: Alignment.centerRight,
+                      height: widget.innerSize,
+                      child: widget.textOff,
                     ),
                   ),
                 ),
@@ -160,28 +154,22 @@ class _RollingSwitchState extends State<LiteRollingSwitch> with SingleTickerProv
                       child: Stack(
                         children: <Widget>[
                           Center(
-                            child: AnimatedBuilder(
-                              animation: animationController,
-                              builder: (context, child) => FadeTransition(
-                                opacity: animationOpacityOut,
-                                child: Icon(
-                                  widget.iconOff,
-                                  size: widget.innerSize / 2,
-                                  color: animationColor.value,
-                                ),
+                            child: FadeTransition(
+                              opacity: animationOpacityOut,
+                              child: Icon(
+                                widget.iconOff,
+                                size: widget.innerSize / 2,
+                                color: animationColor.value,
                               ),
                             ),
                           ),
                           Center(
-                            child: AnimatedBuilder(
-                              animation: animationController,
-                              builder: (context, child) => FadeTransition(
-                                opacity: animationOpacityIn,
-                                child: Icon(
-                                  widget.iconOn,
-                                  size: widget.innerSize / 2,
-                                  color: animationColor.value,
-                                ),
+                            child: FadeTransition(
+                              opacity: animationOpacityIn,
+                              child: Icon(
+                                widget.iconOn,
+                                size: widget.innerSize / 2,
+                                color: animationColor.value,
                               ),
                             ),
                           ),
