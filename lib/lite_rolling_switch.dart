@@ -11,6 +11,7 @@ class LiteRollingSwitch extends StatefulWidget {
   final Function(bool) onChanged;
   final double width;
   final double height;
+  final double innerSize;
   final Text textOff;
   final Text textOn;
   final Color colorOn;
@@ -26,6 +27,7 @@ class LiteRollingSwitch extends StatefulWidget {
     this.initialState = false,
     this.width = 130.0,
     this.height = 50.0,
+    this.innerSize = 40.0,
     this.textOff,
     this.textOn,
     this.colorOn = Colors.green,
@@ -38,7 +40,7 @@ class LiteRollingSwitch extends StatefulWidget {
     this.onSwipe,
     this.onChanged,
   })  : assert(initialState != null && onChanged != null),
-        assert(height >= 50);
+        assert(height >= 50.0 && innerSize >= 40.0);
 
   @override
   _RollingSwitchState createState() => _RollingSwitchState();
@@ -46,8 +48,7 @@ class LiteRollingSwitch extends StatefulWidget {
 
 class _RollingSwitchState extends State<LiteRollingSwitch> with SingleTickerProviderStateMixin {
   double maxWidthRotation = 0.0;
-  double innerSize = 0.0;
-  final int _margin = 10;
+  final double _margin = 10.0;
 
   AnimationController animationController;
   Animation<double> animation;
@@ -60,8 +61,7 @@ class _RollingSwitchState extends State<LiteRollingSwitch> with SingleTickerProv
   @override
   void initState() {
     super.initState();
-    innerSize = widget.height - _margin;
-    maxWidthRotation = (widget.width - innerSize - _margin);
+    maxWidthRotation = (widget.width - widget.innerSize - _margin);
 
     animationController = AnimationController(
       vsync: this,
@@ -69,29 +69,10 @@ class _RollingSwitchState extends State<LiteRollingSwitch> with SingleTickerProv
       upperBound: 1.0,
       duration: widget.animationDuration,
     );
-    animation = CurvedAnimation(parent: animationController, curve: Curves.easeInOut);
+    initAllAnimation();
 
-    animationOpacityOut = Tween(begin: 1.0, end: 0.0).animate(
-      CurvedAnimation(
-        parent: animationController,
-        curve: Interval(0.0, 0.5, curve: Curves.easeInOut),
-      ),
-    );
-
-    animationOpacityIn = Tween(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: animationController,
-        curve: Interval(0.45, 1.0, curve: Curves.easeInOut),
-      ),
-    );
-
-    animationController.addListener(() {
-      setState(() {
-        value = animation.value;
-      });
-    });
     turnState = widget.initialState;
-    _determine();
+    //_determine();
   }
 
   @override
@@ -119,75 +100,101 @@ class _RollingSwitchState extends State<LiteRollingSwitch> with SingleTickerProv
           color: transitionColor,
           borderRadius: BorderRadius.circular(50),
         ),
-        child: Stack(
-          children: <Widget>[
-            Transform.translate(
-              offset: Offset(10 * value, 0), //original
-              child: FadeTransition(
-                opacity: animationOpacityOut,
-                child: Container(
-                  padding: EdgeInsets.only(right: 10),
-                  alignment: Alignment.centerRight,
-                  height: 40,
-                  child: widget.textOff,
-                ),
-              ),
-            ),
-            Transform.translate(
-              offset: Offset(10 * (1 - value), 0), //original
-              child: FadeTransition(
-                opacity: animationOpacityIn,
-                child: Container(
-                  padding: EdgeInsets.only(top: 10, left: 5),
-                  alignment: Alignment.centerLeft,
-                  height: 40,
-                  child: widget.textOn,
-                ),
-              ),
-            ),
-            Transform.translate(
-              offset: Offset(maxWidthRotation * value, 0),
-              child: Transform.rotate(
-                angle: lerpDouble(0, 2 * pi, value),
-                child: Container(
-                  height: innerSize,
-                  width: innerSize,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                  ),
-                  child: Stack(
-                    children: <Widget>[
-                      Center(
-                        child: FadeTransition(
-                          opacity: animationOpacityOut,
-                          child: Icon(
-                            widget.iconOff,
-                            size: innerSize / 2,
-                            color: transitionColor,
-                          ),
-                        ),
-                      ),
-                      Center(
-                        child: FadeTransition(
-                          opacity: animationOpacityIn,
-                          child: Icon(
-                            widget.iconOn,
-                            size: innerSize / 2,
-                            color: transitionColor,
-                          ),
-                        ),
-                      ),
-                    ],
+        child: Center(
+          child: Stack(
+            children: <Widget>[
+              Transform.translate(
+                offset: Offset(_margin.toInt() * value, 0), //original
+                child: FadeTransition(
+                  opacity: animationOpacityOut,
+                  child: Container(
+                    padding: EdgeInsets.only(right: _margin),
+                    alignment: Alignment.centerRight,
+                    height: widget.innerSize,
+                    child: widget.textOff,
                   ),
                 ),
               ),
-            )
-          ],
+              Transform.translate(
+                offset: Offset(_margin.toInt() * (1 - value), 0), //original
+                child: FadeTransition(
+                  opacity: animationOpacityIn,
+                  child: Container(
+                    padding: EdgeInsets.only(left: _margin),
+                    alignment: Alignment.centerLeft,
+                    height: widget.innerSize,
+                    child: widget.textOn,
+                  ),
+                ),
+              ),
+              Transform.translate(
+                offset: Offset(maxWidthRotation * value, 0),
+                child: Transform.rotate(
+                  angle: lerpDouble(0, 2 * pi, value),
+                  child: Container(
+                    height: widget.innerSize,
+                    width: widget.innerSize,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                    ),
+                    child: Stack(
+                      children: <Widget>[
+                        Center(
+                          child: FadeTransition(
+                            opacity: animationOpacityOut,
+                            child: Icon(
+                              widget.iconOff,
+                              size: widget.innerSize / 2,
+                              color: transitionColor,
+                            ),
+                          ),
+                        ),
+                        Center(
+                          child: FadeTransition(
+                            opacity: animationOpacityIn,
+                            child: Icon(
+                              widget.iconOn,
+                              size: widget.innerSize / 2,
+                              color: transitionColor,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  void initAllAnimation() {
+    animation = CurvedAnimation(parent: animationController, curve: Curves.easeInOut);
+
+    animationOpacityOut = Tween(begin: 1.0, end: 0.0).animate(
+      CurvedAnimation(
+        parent: animationController,
+        curve: Interval(0.0, 0.5, curve: Curves.easeInOut),
+      ),
+    );
+
+    animationOpacityIn = Tween(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: animationController,
+        curve: Interval(0.45, 1.0, curve: Curves.easeInOut),
+      ),
+    );
+
+    animationController.addListener(() {
+      setState(() {
+        value = animation.value;
+      });
+    });
   }
 
   @override
