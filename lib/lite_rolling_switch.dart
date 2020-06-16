@@ -59,6 +59,7 @@ class _RollingSwitchState extends State<LiteRollingSwitch> with SingleTickerProv
   Animation<double> animation;
   Animation<double> animationOpacityOut;
   Animation<double> animationOpacityIn;
+  Animation<Color> animationColor;
 
   bool turnState = true;
 
@@ -76,14 +77,14 @@ class _RollingSwitchState extends State<LiteRollingSwitch> with SingleTickerProv
     initAllAnimation();
 
     turnState = widget.initialState;
-    /*if (turnState) {
+    if (turnState) {
       animationController.value = 1;
-    }*/
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    Color transitionColor = Color.lerp(widget.colorOff, widget.colorOn, animation.value);
+    //Color transitionColor = Color.lerp(widget.colorOff, widget.colorOn, animation.value);
 
     return GestureDetector(
       onDoubleTap: () {
@@ -99,93 +100,102 @@ class _RollingSwitchState extends State<LiteRollingSwitch> with SingleTickerProv
         if (widget.onSwipe != null) widget.onSwipe();
         //widget.onSwipe();
       },
-      child: Container(
-        padding: EdgeInsets.all(5),
-        width: widget.width,
-        height: widget.height,
-        decoration: BoxDecoration(
-          color: transitionColor,
-          borderRadius: BorderRadius.circular(50),
-        ),
-        child: Center(
-          child: Stack(
-            children: <Widget>[
-              AnimatedBuilder(
-                animation: animationController,
-                child: Container(
-                  padding: EdgeInsets.only(right: _margin),
-                  alignment: Alignment.centerRight,
-                  height: widget.innerSize,
-                  child: widget.textOff,
-                ),
-                builder: (_, child) => Transform.translate(
-                  offset: Offset(_margin.toInt() * animation.value, 0), //original
-                  child: FadeTransition(
-                    opacity: animationOpacityOut,
-                    child: child,
-                  ),
-                ),
-              ),
-              AnimatedBuilder(
-                animation: animationController,
-                child: Container(
-                  padding: EdgeInsets.only(left: _margin),
-                  alignment: Alignment.centerLeft,
-                  height: widget.innerSize,
-                  child: widget.textOn,
-                ),
-                builder: (_, child) => Transform.translate(
-                  offset: Offset(_margin.toInt() * (1 - animation.value), 0), //original
-                  child: FadeTransition(
-                    opacity: animationOpacityIn,
-                    child: child,
-                  ),
-                ),
-              ),
-              AnimatedBuilder(
-                animation: animationController,
-                child: Transform.rotate(
-                  angle: lerpDouble(0, 2 * pi, animation.value),
+      child: AnimatedBuilder(
+        animation: animationController,
+        builder: (context, child) => Container(
+          padding: EdgeInsets.all(5),
+          width: widget.width,
+          height: widget.height,
+          decoration: BoxDecoration(
+            color: animationColor.value,
+            borderRadius: BorderRadius.circular(50),
+          ),
+          child: Center(
+            child: Stack(
+              children: <Widget>[
+                AnimatedBuilder(
+                  animation: animationController,
                   child: Container(
+                    padding: EdgeInsets.only(right: _margin),
+                    alignment: Alignment.centerRight,
                     height: widget.innerSize,
-                    width: widget.innerSize,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white,
-                    ),
-                    child: Stack(
-                      children: <Widget>[
-                        Center(
-                          child: FadeTransition(
-                            opacity: animationOpacityOut,
-                            child: Icon(
-                              widget.iconOff,
-                              size: widget.innerSize / 2,
-                              color: transitionColor,
-                            ),
-                          ),
-                        ),
-                        Center(
-                          child: FadeTransition(
-                            opacity: animationOpacityIn,
-                            child: Icon(
-                              widget.iconOn,
-                              size: widget.innerSize / 2,
-                              color: transitionColor,
-                            ),
-                          ),
-                        ),
-                      ],
+                    child: widget.textOff,
+                  ),
+                  builder: (_, child) => Transform.translate(
+                    offset: Offset(_margin.toInt() * animation.value, 0), //original
+                    child: FadeTransition(
+                      opacity: animationOpacityOut,
+                      child: child,
                     ),
                   ),
                 ),
-                builder: (_, child) => Transform.translate(
-                  offset: Offset(maxWidthRotation * animation.value, 0),
-                  child: child,
+                AnimatedBuilder(
+                  animation: animationController,
+                  child: Container(
+                    padding: EdgeInsets.only(left: _margin),
+                    alignment: Alignment.centerLeft,
+                    height: widget.innerSize,
+                    child: widget.textOn,
+                  ),
+                  builder: (_, child) => Transform.translate(
+                    offset: Offset(_margin.toInt() * (1 - animation.value), 0), //original
+                    child: FadeTransition(
+                      opacity: animationOpacityIn,
+                      child: child,
+                    ),
+                  ),
                 ),
-              )
-            ],
+                AnimatedBuilder(
+                  animation: animationController,
+                  child: Transform.rotate(
+                    angle: lerpDouble(0, 2 * pi, animation.value),
+                    child: Container(
+                      height: widget.innerSize,
+                      width: widget.innerSize,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white,
+                      ),
+                      child: Stack(
+                        children: <Widget>[
+                          Center(
+                            child: AnimatedBuilder(
+                              animation: animationController,
+                              builder: (context, child) => FadeTransition(
+                                opacity: animationOpacityOut,
+                                child: Icon(
+                                  widget.iconOff,
+                                  size: widget.innerSize / 2,
+                                  color: animationColor.value,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Center(
+                            child: AnimatedBuilder(
+                              animation: animationController,
+                              builder: (context, child) => FadeTransition(
+                                opacity: animationOpacityIn,
+                                child: Icon(
+                                  widget.iconOn,
+                                  size: widget.innerSize / 2,
+                                  color: animationColor.value,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  builder: (_, child) => Transform.translate(
+                    offset: Offset(maxWidthRotation * animation.value, 0),
+                    child: child,
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -208,6 +218,25 @@ class _RollingSwitchState extends State<LiteRollingSwitch> with SingleTickerProv
         curve: Interval(0.45, 1.0, curve: Curves.easeInOut),
       ),
     );
+
+    animationColor = ColorTween(begin: widget.colorOn, end: widget.colorOff).animate(
+      CurvedAnimation(
+        parent: animationController,
+        curve: Interval(0.0, 1.0, curve: Curves.easeInOut),
+      ),
+    );
+
+    /*animationColor = TweenSequence<Color>(
+      [
+        TweenSequenceItem(
+          weight: 1.0,
+          tween: ColorTween(
+            begin: widget.colorOff,
+            end: widget.colorOn,
+          ),
+        ),
+      ],
+    );*/
 
     animationController.addListener(() {
       _colorNotifier.value = animationController.value;
