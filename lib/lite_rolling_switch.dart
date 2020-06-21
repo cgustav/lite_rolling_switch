@@ -1,8 +1,9 @@
 library lite_rolling_switch;
 
-import 'package:flutter/material.dart';
-import 'dart:ui';
 import 'dart:math';
+import 'dart:ui';
+
+import 'package:flutter/material.dart';
 
 /// Customable and attractive Switch button.
 /// Currently, you can't change the widget
@@ -74,19 +75,17 @@ class _RollingSwitchState extends State<LiteRollingSwitch>
   void initState() {
     super.initState();
     animationController = AnimationController(
-        vsync: this,
-        lowerBound: 0.0,
-        upperBound: 1.0,
-        duration: widget.animationDuration);
-    animation =
-        CurvedAnimation(parent: animationController, curve: Curves.easeInOut);
+        vsync: this, lowerBound: 0.0, upperBound: 1.0, duration: widget.animationDuration);
+    animation = CurvedAnimation(parent: animationController, curve: Curves.easeInOut);
     animationController.addListener(() {
       setState(() {
         value = animation.value;
       });
     });
     turnState = widget.value;
-    _determine();
+    if (turnState) {
+      animationController.animateTo(1, duration: Duration(seconds: 0));
+    }
   }
 
   @override
@@ -110,8 +109,8 @@ class _RollingSwitchState extends State<LiteRollingSwitch>
       child: Container(
         padding: EdgeInsets.all(5),
         width: 130,
-        decoration: BoxDecoration(
-            color: transitionColor, borderRadius: BorderRadius.circular(50)),
+        decoration:
+            BoxDecoration(color: transitionColor, borderRadius: BorderRadius.circular(50)),
         child: Stack(
           children: <Widget>[
             Transform.translate(
@@ -158,8 +157,7 @@ class _RollingSwitchState extends State<LiteRollingSwitch>
                   height: 40,
                   width: 40,
                   alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle, color: Colors.white),
+                  decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white),
                   child: Stack(
                     children: <Widget>[
                       Center(
@@ -198,9 +196,7 @@ class _RollingSwitchState extends State<LiteRollingSwitch>
   _determine({bool changeState = false}) {
     setState(() {
       if (changeState) turnState = !turnState;
-      (turnState)
-          ? animationController.forward()
-          : animationController.reverse();
+      (turnState) ? animationController.forward() : animationController.reverse();
 
       widget.onChanged(turnState);
     });
