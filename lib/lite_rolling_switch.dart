@@ -23,6 +23,7 @@ import 'dart:math';
 class LiteRollingSwitch extends StatefulWidget {
   @required
   final bool value;
+  final double width;
   @required
   final Function(bool) onChanged;
   final String textOff;
@@ -39,6 +40,7 @@ class LiteRollingSwitch extends StatefulWidget {
 
   LiteRollingSwitch(
       {this.value = false,
+      this.width = 130,
       this.textOff = "Off",
       this.textOn = "On",
       this.textSize = 14.0,
@@ -109,7 +111,7 @@ class _RollingSwitchState extends State<LiteRollingSwitch>
       },
       child: Container(
         padding: EdgeInsets.all(5),
-        width: 130,
+        width: widget.width,
         decoration: BoxDecoration(
             color: transitionColor, borderRadius: BorderRadius.circular(50)),
         child: Stack(
@@ -151,7 +153,7 @@ class _RollingSwitchState extends State<LiteRollingSwitch>
               ),
             ),
             Transform.translate(
-              offset: Offset(80 * value, 0),
+              offset: Offset((widget.width - 50) * value, 0),
               child: Transform.rotate(
                 angle: lerpDouble(0, 2 * pi, value),
                 child: Container(
