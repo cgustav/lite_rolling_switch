@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'dart:math';
 
+import 'package:intl/intl.dart';
+
 /// Customable and attractive Switch button.
 /// Currently, you can't change the widget
 /// width and height properties.
@@ -115,12 +117,18 @@ class _RollingSwitchState extends State<LiteRollingSwitch>
         child: Stack(
           children: <Widget>[
             Transform.translate(
-              offset: Offset(10 * value, 0), //original
+              offset: isRTL(context)
+                  ? Offset(-10 * value, 0)
+                  : Offset(10 * value, 0), //original
               child: Opacity(
                 opacity: (1 - value).clamp(0.0, 1.0),
                 child: Container(
-                  padding: EdgeInsets.only(right: 10),
-                  alignment: Alignment.centerRight,
+                  padding: isRTL(context)
+                      ? EdgeInsets.only(left: 10)
+                      : EdgeInsets.only(right: 10),
+                  alignment: isRTL(context)
+                      ? Alignment.centerLeft
+                      : Alignment.centerRight,
                   height: 40,
                   child: Text(
                     widget.textOff,
@@ -133,12 +141,18 @@ class _RollingSwitchState extends State<LiteRollingSwitch>
               ),
             ),
             Transform.translate(
-              offset: Offset(10 * (1 - value), 0), //original
+              offset: isRTL(context)
+                  ? Offset(-10 * (1 - value), 0)
+                  : Offset(10 * (1 - value), 0), //original
               child: Opacity(
                 opacity: value.clamp(0.0, 1.0),
                 child: Container(
-                  padding: EdgeInsets.only(/*top: 10,*/ left: 5),
-                  alignment: Alignment.centerLeft,
+                  padding: isRTL(context)
+                      ? EdgeInsets.only(/*top: 10,*/ right: 5)
+                      : EdgeInsets.only(/*top: 10,*/ left: 5),
+                  alignment: isRTL(context)
+                      ? Alignment.centerRight
+                      : Alignment.centerLeft,
                   height: 40,
                   child: Text(
                     widget.textOn,
@@ -151,7 +165,9 @@ class _RollingSwitchState extends State<LiteRollingSwitch>
               ),
             ),
             Transform.translate(
-              offset: Offset(80 * value, 0),
+              offset: isRTL(context)
+                  ? Offset(-80 * value, 0)
+                  : Offset(80 * value, 0),
               child: Transform.rotate(
                 angle: lerpDouble(0, 2 * pi, value),
                 child: Container(
@@ -173,13 +189,15 @@ class _RollingSwitchState extends State<LiteRollingSwitch>
                         ),
                       ),
                       Center(
-                          child: Opacity(
-                              opacity: value.clamp(0.0, 1.0),
-                              child: Icon(
-                                widget.iconOn,
-                                size: 21,
-                                color: transitionColor,
-                              ))),
+                        child: Opacity(
+                          opacity: value.clamp(0.0, 1.0),
+                          child: Icon(
+                            widget.iconOn,
+                            size: 21,
+                            color: transitionColor,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -205,4 +223,8 @@ class _RollingSwitchState extends State<LiteRollingSwitch>
       widget.onChanged(turnState);
     });
   }
+}
+
+bool isRTL(BuildContext context) {
+  return Bidi.isRtlLanguage(Localizations.localeOf(context).languageCode);
 }
