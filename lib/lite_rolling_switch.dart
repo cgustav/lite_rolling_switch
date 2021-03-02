@@ -26,7 +26,9 @@ class LiteRollingSwitch extends StatefulWidget {
   @required
   final Function(bool) onChanged;
   final String textOff;
+  final Color textOffColor;
   final String textOn;
+  final Color textOnColor;
   final Color colorOn;
   final Color colorOff;
   final double textSize;
@@ -50,14 +52,15 @@ class LiteRollingSwitch extends StatefulWidget {
       this.onTap,
       this.onDoubleTap,
       this.onSwipe,
-      this.onChanged});
+      this.onChanged,
+      this.textOffColor = Colors.white,
+      this.textOnColor = Colors.black});
 
   @override
   _RollingSwitchState createState() => _RollingSwitchState();
 }
 
-class _RollingSwitchState extends State<LiteRollingSwitch>
-    with SingleTickerProviderStateMixin {
+class _RollingSwitchState extends State<LiteRollingSwitch> with SingleTickerProviderStateMixin {
   AnimationController animationController;
   Animation<double> animation;
   double value = 0.0;
@@ -73,13 +76,8 @@ class _RollingSwitchState extends State<LiteRollingSwitch>
   @override
   void initState() {
     super.initState();
-    animationController = AnimationController(
-        vsync: this,
-        lowerBound: 0.0,
-        upperBound: 1.0,
-        duration: widget.animationDuration);
-    animation =
-        CurvedAnimation(parent: animationController, curve: Curves.easeInOut);
+    animationController = AnimationController(vsync: this, lowerBound: 0.0, upperBound: 1.0, duration: widget.animationDuration);
+    animation = CurvedAnimation(parent: animationController, curve: Curves.easeInOut);
     animationController.addListener(() {
       setState(() {
         value = animation.value;
@@ -110,8 +108,7 @@ class _RollingSwitchState extends State<LiteRollingSwitch>
       child: Container(
         padding: EdgeInsets.all(5),
         width: 130,
-        decoration: BoxDecoration(
-            color: transitionColor, borderRadius: BorderRadius.circular(50)),
+        decoration: BoxDecoration(color: transitionColor, borderRadius: BorderRadius.circular(50)),
         child: Stack(
           children: <Widget>[
             Transform.translate(
@@ -124,10 +121,7 @@ class _RollingSwitchState extends State<LiteRollingSwitch>
                   height: 40,
                   child: Text(
                     widget.textOff,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: widget.textSize),
+                    style: TextStyle(color: widget.textOffColor, fontWeight: FontWeight.bold, fontSize: widget.textSize),
                   ),
                 ),
               ),
@@ -142,10 +136,7 @@ class _RollingSwitchState extends State<LiteRollingSwitch>
                   height: 40,
                   child: Text(
                     widget.textOn,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: widget.textSize),
+                    style: TextStyle(color: widget.textOnColor, fontWeight: FontWeight.bold, fontSize: widget.textSize),
                   ),
                 ),
               ),
@@ -158,8 +149,7 @@ class _RollingSwitchState extends State<LiteRollingSwitch>
                   height: 40,
                   width: 40,
                   alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle, color: Colors.white),
+                  decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white),
                   child: Stack(
                     children: <Widget>[
                       Center(
@@ -198,9 +188,7 @@ class _RollingSwitchState extends State<LiteRollingSwitch>
   _determine({bool changeState = false}) {
     setState(() {
       if (changeState) turnState = !turnState;
-      (turnState)
-          ? animationController.forward()
-          : animationController.reverse();
+      (turnState) ? animationController.forward() : animationController.reverse();
 
       widget.onChanged(turnState);
     });
