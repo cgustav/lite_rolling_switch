@@ -39,18 +39,18 @@ class LiteRollingSwitch extends StatefulWidget {
 
   LiteRollingSwitch(
       {this.value = false,
-      this.textOff = "Off",
-      this.textOn = "On",
-      this.textSize = 14.0,
-      this.colorOn = Colors.green,
-      this.colorOff = Colors.red,
-      this.iconOff = Icons.flag,
-      this.iconOn = Icons.check,
-      this.animationDuration = const Duration(milliseconds: 600),
-      this.onTap,
-      this.onDoubleTap,
-      this.onSwipe,
-      this.onChanged});
+        this.textOff = "Off",
+        this.textOn = "On",
+        this.textSize = 14.0,
+        this.colorOn = Colors.green,
+        this.colorOff = Colors.red,
+        this.iconOff = Icons.flag,
+        this.iconOn = Icons.check,
+        this.animationDuration = const Duration(milliseconds: 600),
+        required this.onTap,
+        required this.onDoubleTap,
+        required this.onSwipe,
+        required this.onChanged});
 
   @override
   _RollingSwitchState createState() => _RollingSwitchState();
@@ -58,11 +58,11 @@ class LiteRollingSwitch extends StatefulWidget {
 
 class _RollingSwitchState extends State<LiteRollingSwitch>
     with SingleTickerProviderStateMixin {
-  AnimationController animationController;
-  Animation<double> animation;
+  late AnimationController animationController;
+  late Animation<double> animation;
   double value = 0.0;
 
-  bool turnState;
+  late bool turnState;
 
   @override
   void dispose() {
@@ -91,7 +91,7 @@ class _RollingSwitchState extends State<LiteRollingSwitch>
 
   @override
   Widget build(BuildContext context) {
-    Color transitionColor = Color.lerp(widget.colorOff, widget.colorOn, value);
+    Color? transitionColor = Color.lerp(widget.colorOff, widget.colorOn, value);
 
     return GestureDetector(
       onDoubleTap: () {
@@ -153,7 +153,7 @@ class _RollingSwitchState extends State<LiteRollingSwitch>
             Transform.translate(
               offset: Offset(80 * value, 0),
               child: Transform.rotate(
-                angle: lerpDouble(0, 2 * pi, value),
+                angle: lerpDouble(0, 2 * pi, value)!,
                 child: Container(
                   height: 40,
                   width: 40,
