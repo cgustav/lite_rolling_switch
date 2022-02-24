@@ -12,9 +12,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({
-    Key key,
-  }) : super(key: key);
+  const MyHomePage({Key? key}) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -37,6 +35,9 @@ class _MyHomePageState extends State<MyHomePage> {
               onChanged: (bool state) {
                 print('turned ${(state) ? 'on' : 'off'}');
               },
+              onDoubleTap: () {},
+              onSwipe: () {},
+              onTap: () {},
             ),
 
             //Customized
@@ -53,6 +54,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 onChanged: (bool state) {
                   print('turned ${(state) ? 'on' : 'off'}');
                 },
+                onDoubleTap: () {},
+                onSwipe: () {},
+                onTap: () {},
               ),
             )
           ],
