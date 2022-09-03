@@ -1,8 +1,9 @@
 library lite_rolling_switch;
 
-import 'package:flutter/material.dart';
-import 'dart:ui';
 import 'dart:math';
+import 'dart:ui';
+
+import 'package:flutter/material.dart';
 
 /// Customable and attractive Switch button.
 /// Currently, you can't change the widget
@@ -88,7 +89,14 @@ class _RollingSwitchState extends State<LiteRollingSwitch>
       });
     });
     turnState = widget.value;
-    _determine();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        if (turnState) {
+          animationController.forward();
+        }
+      });
+    });
   }
 
   @override
