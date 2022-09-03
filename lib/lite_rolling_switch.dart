@@ -1,8 +1,9 @@
 library lite_rolling_switch;
 
-import 'package:flutter/material.dart';
-import 'dart:ui';
 import 'dart:math';
+import 'dart:ui';
+
+import 'package:flutter/material.dart';
 
 /// Customable and attractive Switch button.
 /// Currently, you can't change the widget
@@ -23,6 +24,7 @@ import 'dart:math';
 class LiteRollingSwitch extends StatefulWidget {
   @required
   final bool value;
+  final double width;
   @required
   final Function(bool) onChanged;
   final String textOff;
@@ -41,6 +43,7 @@ class LiteRollingSwitch extends StatefulWidget {
 
   LiteRollingSwitch(
       {this.value = false,
+      this.width = 130,
       this.textOff = "Off",
       this.textOn = "On",
       this.textSize = 14.0,
@@ -84,7 +87,14 @@ class _RollingSwitchState extends State<LiteRollingSwitch> with SingleTickerProv
       });
     });
     turnState = widget.value;
-    _determine();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        if (turnState) {
+          animationController.forward();
+        }
+      });
+    });
   }
 
   @override
@@ -107,8 +117,9 @@ class _RollingSwitchState extends State<LiteRollingSwitch> with SingleTickerProv
       },
       child: Container(
         padding: EdgeInsets.all(5),
-        width: 130,
-        decoration: BoxDecoration(color: transitionColor, borderRadius: BorderRadius.circular(50)),
+        width: widget.width,
+        decoration: BoxDecoration(
+            color: transitionColor, borderRadius: BorderRadius.circular(50)),
         child: Stack(
           children: <Widget>[
             Transform.translate(
@@ -142,7 +153,7 @@ class _RollingSwitchState extends State<LiteRollingSwitch> with SingleTickerProv
               ),
             ),
             Transform.translate(
-              offset: Offset(80 * value, 0),
+              offset: Offset((widget.width - 50) * value, 0),
               child: Transform.rotate(
                 angle: lerpDouble(0, 2 * pi, value),
                 child: Container(
