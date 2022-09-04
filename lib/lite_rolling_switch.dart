@@ -7,9 +7,10 @@ import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
 
-/// Customable and attractive Switch button.
-/// Currently, you can't change the widget
-/// width and height properties.
+/// Customable and nice Switch button :).
+///
+/// Currently, you can change the widget
+/// width but not the height property.
 ///
 /// As well as the classical Switch Widget
 /// from flutter material, the following
@@ -19,8 +20,8 @@ import 'package:intl/intl.dart';
 /// * [onChanged] is called when the user toggles the switch on or off.
 ///
 /// If you don't set these arguments you would
-/// experiment errors related to animationController
-/// states or any other undesirable behavior, please
+/// experiment undesirable behaviors from 
+/// animationController, please
 /// don't forget to set them.
 ///
 class LiteRollingSwitch extends StatefulWidget {
