@@ -16,7 +16,7 @@ import 'package:intl/intl.dart';
 /// * [onChanged] is called when the user toggles the switch on or off.
 ///
 /// If you don't set these arguments you would
-/// experiment undesirable behaviors from 
+/// experiment undesirable behaviors from
 /// animationController, please
 /// don't forget to set them.
 ///
@@ -24,7 +24,7 @@ class LiteRollingSwitch extends StatefulWidget {
   @required
   final bool value;
   final double width;
-  
+
   @required
   final Function(bool) onChanged;
   final String textOff;
@@ -41,41 +41,37 @@ class LiteRollingSwitch extends StatefulWidget {
   final Function onDoubleTap;
   final Function onSwipe;
 
-  LiteRollingSwitch(
-      {this.value = false,
-      this.width = 130,
-      this.textOff = "Off",
-      this.textOn = "On",
-      this.textSize = 14.0,
-      this.colorOn = Colors.green,
-      this.colorOff = Colors.red,
-      this.iconOff = Icons.flag,
-      this.iconOn = Icons.check,
-      this.animationDuration = const Duration(milliseconds: 600),
-      this.textOffColor = Colors.white,
-      this.textOnColor = Colors.black,
-      this.onTap,
-      this.onDoubleTap,
-      this.onSwipe,
-      required this.onChanged,
+  LiteRollingSwitch({
+    this.value = false,
+    this.width = 130,
+    this.textOff = "Off",
+    this.textOn = "On",
+    this.textSize = 14.0,
+    this.colorOn = Colors.green,
+    this.colorOff = Colors.red,
+    this.iconOff = Icons.flag,
+    this.iconOn = Icons.check,
+    this.animationDuration = const Duration(milliseconds: 600),
+    this.textOffColor = Colors.white,
+    this.textOnColor = Colors.black,
+    required this.onTap,
+    required this.onDoubleTap,
+    required this.onSwipe,
+    required this.onChanged,
   });
 
   @override
   _RollingSwitchState createState() => _RollingSwitchState();
 }
 
-
 class _RollingSwitchState extends State<LiteRollingSwitch>
     with SingleTickerProviderStateMixin {
-  
   /// Late declarations
   late AnimationController animationController;
   late Animation<double> animation;
   late bool turnState;
-  
+
   double value = 0.0;
-
-
 
   @override
   void dispose() {
@@ -86,8 +82,13 @@ class _RollingSwitchState extends State<LiteRollingSwitch>
   @override
   void initState() {
     super.initState();
-    animationController = AnimationController(vsync: this, lowerBound: 0.0, upperBound: 1.0, duration: widget.animationDuration);
-    animation = CurvedAnimation(parent: animationController, curve: Curves.easeInOut);
+    animationController = AnimationController(
+        vsync: this,
+        lowerBound: 0.0,
+        upperBound: 1.0,
+        duration: widget.animationDuration);
+    animation =
+        CurvedAnimation(parent: animationController, curve: Curves.easeInOut);
     animationController.addListener(() {
       setState(() {
         value = animation.value;
@@ -95,7 +96,7 @@ class _RollingSwitchState extends State<LiteRollingSwitch>
     });
     turnState = widget.value;
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
       setState(() {
         if (turnState) {
           animationController.forward();
@@ -111,15 +112,15 @@ class _RollingSwitchState extends State<LiteRollingSwitch>
     return GestureDetector(
       onDoubleTap: () {
         _action();
-        widget.onDoubleTap!();
+        widget.onDoubleTap();
       },
       onTap: () {
         _action();
-        widget.onTap!();
+        widget.onTap();
       },
       onPanEnd: (details) {
         _action();
-        widget.onSwipe!();
+        widget.onSwipe();
       },
       child: Container(
         padding: EdgeInsets.all(5),
@@ -144,7 +145,10 @@ class _RollingSwitchState extends State<LiteRollingSwitch>
                   height: 40,
                   child: Text(
                     widget.textOff,
-                    style: TextStyle(color: widget.textOffColor, fontWeight: FontWeight.bold, fontSize: widget.textSize),
+                    style: TextStyle(
+                        color: widget.textOffColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: widget.textSize),
                   ),
                 ),
               ),
@@ -157,30 +161,34 @@ class _RollingSwitchState extends State<LiteRollingSwitch>
                 opacity: value.clamp(0.0, 1.0),
                 child: Container(
                   padding: isRTL(context)
-                      ? EdgeInsets.only(/*top: 10,*/ right: 5)
-                      : EdgeInsets.only(/*top: 10,*/ left: 5),
+                      ? EdgeInsets.only(right: 5)
+                      : EdgeInsets.only(left: 5),
                   alignment: isRTL(context)
                       ? Alignment.centerRight
                       : Alignment.centerLeft,
                   height: 40,
                   child: Text(
                     widget.textOn,
-                    style: TextStyle(color: widget.textOnColor, fontWeight: FontWeight.bold, fontSize: widget.textSize),
+                    style: TextStyle(
+                        color: widget.textOnColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: widget.textSize),
                   ),
                 ),
               ),
             ),
             Transform.translate(
               offset: isRTL(context)
-	                ? Offset((-widget.width + 50) * value, 0)
-	                : Offset((widget.width - 50)  * value, 0),
+                  ? Offset((-widget.width + 50) * value, 0)
+                  : Offset((widget.width - 50) * value, 0),
               child: Transform.rotate(
                 angle: 0,
                 child: Container(
                   height: 40,
                   width: 40,
                   alignment: Alignment.center,
-                  decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle, color: Colors.white),
                   child: Stack(
                     children: <Widget>[
                       Center(
@@ -221,7 +229,9 @@ class _RollingSwitchState extends State<LiteRollingSwitch>
   _determine({bool changeState = false}) {
     setState(() {
       if (changeState) turnState = !turnState;
-      (turnState) ? animationController.forward() : animationController.reverse();
+      (turnState)
+          ? animationController.forward()
+          : animationController.reverse();
 
       widget.onChanged(turnState);
     });
