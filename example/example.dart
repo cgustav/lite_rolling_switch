@@ -47,13 +47,14 @@ class _MyHomePageState extends State<MyHomePage> {
               padding: const EdgeInsets.only(top: 20),
               child: LiteRollingSwitch(
                 value: true,
-                width: 130,
+                width: 150,
                 textOn: 'active',
                 textOff: 'inactive',
                 colorOn: Colors.deepOrange,
                 colorOff: Colors.blueGrey,
                 iconOn: Icons.lightbulb_outline,
                 iconOff: Icons.power_settings_new,
+                animationDuration: const Duration(milliseconds: 300),
                 onChanged: (bool state) {
                   print('turned ${(state) ? 'on' : 'off'}');
                 },

@@ -8,17 +8,13 @@ import 'package:intl/intl.dart';
 /// Currently, you can change the widget
 /// width but not the height property.
 ///
-/// As well as the classical Switch Widget
-/// from flutter material, the following
-/// arguments are required:
+/// The following arguments are required:
 ///
-/// * [value] determines whether this switch is on or off.
-/// * [onChanged] is called when the user toggles the switch on or off.
-///
-/// If you don't set these arguments you would
-/// experiment undesirable behaviors from
-/// animationController, please
-/// don't forget to set them.
+/// * [value] determines switch state (on/off).
+/// * [onChanged] is called when user toggles switch on/off.
+/// * [onTap] event called on tap
+/// * [onDoubleTap] event called on double tap
+/// * [onSwipe] event called on swipe (left/right)
 ///
 class LiteRollingSwitch extends StatefulWidget {
   @required
@@ -75,6 +71,7 @@ class _RollingSwitchState extends State<LiteRollingSwitch>
 
   @override
   void dispose() {
+    //Ensure to dispose animation controller
     animationController.dispose();
     super.dispose();
   }
@@ -96,6 +93,7 @@ class _RollingSwitchState extends State<LiteRollingSwitch>
     });
     turnState = widget.value;
 
+    // Executes a function only one time after the layout is completed.
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       setState(() {
         if (turnState) {
@@ -107,6 +105,7 @@ class _RollingSwitchState extends State<LiteRollingSwitch>
 
   @override
   Widget build(BuildContext context) {
+    //Color transition animation
     Color? transitionColor = Color.lerp(widget.colorOff, widget.colorOn, value);
 
     return GestureDetector(

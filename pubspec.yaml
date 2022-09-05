@@ -1,5 +1,5 @@
 name: lite_rolling_switch
-description: Custom Switch button with attractive animation, made to allow you to customize colors, icons and other cosmetic content. Now supports null safety.
+description: Custom Switch button with nice looking and attractive animation, made to allow you to customize colors, icons and other cosmetic content. Now supports null safety.
 version: 1.0.0
 homepage: https://github.com/cgustav/lite_rolling_switch
 
