@@ -55,6 +55,7 @@ Visit the complete changelog [here](CHANGELOG.md).
 - [@Rontu22](https://github.com/Rontu22) - Null safety hints
 - [@Elvis-Sarfo](https://github.com/Elvis-Sarfo) - Null safety hints
 - [@lulupointu](https://github.com/lulupointu) - Component management hints
+- [@ninjagaru](https://github.com/ninjagaru) - Intl upgrade request
 
 ## License
 
