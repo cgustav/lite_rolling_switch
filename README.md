@@ -38,6 +38,10 @@ LiteRollingSwitch(
 
 ```
 
+## Tests
+
+To executed included unit tests run `flutter test`. Feel free to Pull Request your own Unit Test to improve this package!
+
 ## Changelog
 
 Visit the complete changelog [here](CHANGELOG.md).
@@ -55,6 +59,7 @@ Visit the complete changelog [here](CHANGELOG.md).
 - [@Rontu22](https://github.com/Rontu22) - Null safety hints
 - [@Elvis-Sarfo](https://github.com/Elvis-Sarfo) - Null safety hints
 - [@lulupointu](https://github.com/lulupointu) - Component management hints
+- [@ninjagaru](https://github.com/ninjagaru) - Intl upgrade request
 
 ## License
 
