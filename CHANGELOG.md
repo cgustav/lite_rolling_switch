@@ -19,9 +19,11 @@
 - Arguments `onTap`, `onDoubleTap`, `onSwipe` are now required.
 - Improved implementation example.
 - New Community contributions on readme.
-- Enhanced code documentation
+- Enhanced code documentation.
 - MIT License added.
 
 ## [1.0.1] - Minor Update: February 19th, 2023
 
-- Intl Upgrade to 0.18.0 (dart 3 ready dependency)
+- Intl Upgrade to 0.18.0 (dart 3 ready dependency).
+- Unit Tests.
+- Incorporation of package verification and publish process via scripting.

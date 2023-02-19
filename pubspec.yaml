@@ -49,3 +49,8 @@ flutter:
   #
   # For details regarding fonts in packages, see
   # https://flutter.dev/custom-fonts/#from-packages
+
+scripts:
+  # Pre release test script
+  prepublish: "flutter test && flutter analyze && dart format --set-exit-if-changed . && flutter pub publish --dry-run"
+  publish: "flutter test && flutter analyze && dart format --set-exit-if-changed . && flutter pub publish"

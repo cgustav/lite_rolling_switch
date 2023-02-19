@@ -94,7 +94,7 @@ class _RollingSwitchState extends State<LiteRollingSwitch>
     turnState = widget.value;
 
     // Executes a function only one time after the layout is completed.
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
         if (turnState) {
           animationController.forward();
